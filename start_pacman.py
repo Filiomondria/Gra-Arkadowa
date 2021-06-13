@@ -497,14 +497,14 @@ class Game:
         again_text = "Press SPACE BAR to PLAY AGAIN"
         if self.player.current_score > int(self.high_score):
             self.high_score = self.player.current_score
-            self.high_score_file[1] = str(self.player.current_score)
+            self.high_score_file[1] = str(self.player.current_score) +'\n'
             plik = open("high_score.txt",'w')
             for element in self.high_score_file:
                 plik.write(element)
             plik.close()
         self.draw_text('YOUR CURRENT SCORE: {}'.format(self.player.current_score),
                        self.screen, [WIDTH//2 , 250], 48,(153, 255, 102), 'arial',centered=True)
-        self.draw_text('YOUR HIGH SCORE: {}'.format(self.high_score[:-1]), self.screen, [WIDTH//2, 400],48,(255, 191, 0), 'arial',centered=True)
+        self.draw_text('YOUR HIGH SCORE: {}'.format(int(self.high_score)), self.screen, [WIDTH//2, 400],48,(255, 191, 0), 'arial',centered=True)
 
         self.draw_text("GAME OVER", self.screen, [WIDTH//2, 100], 52,
                        RED, "arial", centered=True)
@@ -595,7 +595,7 @@ class Game:
         self.screen.fill(BLACK)
         if self.player.current_score > int(self.high_score):
             self.high_score = self.player.current_score
-            self.high_score_file[1] = str(self.player.current_score)
+            self.high_score_file[1] = str(self.player.current_score) +'\n'
             plik = open("high_score.txt",'w')
             for element in self.high_score_file:
                 plik.write(element)
@@ -603,7 +603,7 @@ class Game:
         self.draw_text('YOU LIVE YET', self.screen, [WIDTH//2 , 150], 65, (255, 204, 0), START_FONT,centered=True)
         self.draw_text('CURRENT SCORE: {}'.format(self.player.current_score),
                        self.screen, [WIDTH//2, 300], 42, (153, 255, 102), 'arial',centered=True)
-        self.draw_text('HIGH SCORE: {}'.format(self.high_score[:-1]), self.screen, [WIDTH // 2, 450], 42, (255, 204, 0), 'arial',centered=True)
+        self.draw_text('HIGH SCORE: {}'.format(int(self.high_score)), self.screen, [WIDTH // 2, 450], 42, (255, 204, 0), 'arial',centered=True)
         self.button_return.draw()
         self.button_exit.draw()
         pygame.display.update()
