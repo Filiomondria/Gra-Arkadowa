@@ -8,9 +8,11 @@ Pacman is a arcade game in which you have to eat the coin or to run away from gh
 
 
 ### Technologies
-**python** 3.7.1
+**python** 3.9
 
 **pygame** 2.0.1
+
+**pygame-widgets** 0.4.3
 
 ### How to run this code
 
