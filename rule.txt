@@ -1,0 +1,19 @@
+ABOUT ME
+
+AUTHOR THIS BIG PROJECT IS FILIP OSZCZEPALIŃSKI
+PLIS DON'T KILL ME AND MY GAME 
+
+RULE
+
+Zabawa polega na sterowaniu tytułowym bohaterem, 
+czyli Pacmanem, i przemierzaniu planszy-labirynt,
+w celu zbierania kolejnych punktów, które uzyskuje się
+poprzez pochłanianie wiecznie nienasyconym Pacmanem 
+kulek rozmieszczonych na mapie i unikaniu przy tym 
+wrogo nastawionych przeciwników, którymi są cztery 
+duszki.Kontakt z choć jednym z nich oznacza utratę 
+jednego życia, a ilość żyć jest ograniczona do 3.
+Ponadto uważaj, żeby nie zbliżyć się zbyt blisko, 
+gdyż zacznie ciebie śledzić, dopóki mu nie uciekniesz.
+Jest jeszcze tryb "run away", który polega na jak 
+najdłuższym przeżyciu w labiryncie. Powodzenia! 
