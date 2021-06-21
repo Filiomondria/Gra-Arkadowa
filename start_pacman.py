@@ -26,8 +26,8 @@ def loadSound(name):
 # screen settings
 WIDTH, HEIGHT = 610, 670
 FPS = 60
-TOP_BOTTOM_BUFFER = 50
-MAZE_WIDTH, MAZE_HEIGHT = WIDTH-TOP_BOTTOM_BUFFER, HEIGHT-TOP_BOTTOM_BUFFER
+TOP_BOTTOM = 50
+M_WIDTH, M_HEIGHT = WIDTH-TOP_BOTTOM, HEIGHT-TOP_BOTTOM
 
 ROWS = 30
 COLS = 28
@@ -56,8 +56,8 @@ class Game:
         self.running = True
         self.state = 'start'
         self.level = 'normal'
-        self.cell_width = MAZE_WIDTH//COLS
-        self.cell_height = MAZE_HEIGHT//ROWS
+        self.cell_width = M_WIDTH//COLS
+        self.cell_height = M_HEIGHT//ROWS
         self.number_movement = 6
         self.kill_ghost = []
         self.walls = []
@@ -140,7 +140,7 @@ class Game:
             inactiveColour=(153, 153, 102),
             pressedColour=(0, 255, 0), radius=20,
             onClick=lambda:self.click_button_set_level_1())
-
+    ###################### FUNCTION TO BOTTON ###########################################
     def click_button_set_level_0(self):
         self.level = "normal"
     def click_button_set_level_1(self):
@@ -220,7 +220,7 @@ class Game:
         :return:
         """
         self.background = loadImage('background.png')
-        self.background = pygame.transform.scale(self.background, (MAZE_WIDTH, MAZE_HEIGHT))
+        self.background = pygame.transform.scale(self.background, (M_WIDTH, M_HEIGHT))
         # player image open
         self.image_Pacman_open = loadImage('Pacman.open.player_small.png',True)
         self.image_Pacman_open = pygame.transform.scale(self.image_Pacman_open, (self.cell_width, self.cell_height))
@@ -329,6 +329,9 @@ class Game:
         self.state = "playing"
 
     def killing_ghost(self,enemy):
+        """
+        Function to reset ghost and add score
+        """
         self.player.current_score += 100
         self.sound_dead_ghost.play()
         self.sound_dead_ghost.set_volume(self.volume_sound)
@@ -424,7 +427,7 @@ class Game:
         self.high_score = self.high_score_file[1]
         self.high_time = self.high_score_file[3]
         self.screen.fill(BLACK)
-        self.screen.blit(self.background, (TOP_BOTTOM_BUFFER//2, TOP_BOTTOM_BUFFER//2))
+        self.screen.blit(self.background, (TOP_BOTTOM//2, TOP_BOTTOM//2))
         self.draw_coins()
         self.draw_kill_coin()
         if self.level == 'normal':
@@ -467,13 +470,13 @@ class Game:
         Creat a coins.
         """
         for coin in self.coins:
-            self.screen.blit(self.image_food, (int(coin.x*self.cell_width + self.cell_width//6)+ TOP_BOTTOM_BUFFER//2.25,
-                                                        int(coin.y*self.cell_height + self.cell_height//6) + TOP_BOTTOM_BUFFER//2.5))
+            self.screen.blit(self.image_food, (int(coin.x*self.cell_width + self.cell_width//6)+ TOP_BOTTOM//2.25,
+                                                        int(coin.y*self.cell_height + self.cell_height//6) + TOP_BOTTOM//2.5))
 
     def draw_kill_coin(self):
         for food_kill in self.kill_ghost:
-            self.screen.blit(self.image_food_kill, (int(food_kill.x * self.cell_width + self.cell_width // 6) + TOP_BOTTOM_BUFFER // 2.25,
-                              int(food_kill.y * self.cell_height + self.cell_height // 6) + TOP_BOTTOM_BUFFER // 2.5))
+            self.screen.blit(self.image_food_kill, (int(food_kill.x * self.cell_width + self.cell_width // 6) + TOP_BOTTOM // 2.25,
+                              int(food_kill.y * self.cell_height + self.cell_height // 6) + TOP_BOTTOM // 2.5))
 
 ########################### GAME OVER FUNCTIONS ################################
 
@@ -497,6 +500,7 @@ class Game:
         again_text = "Press SPACE BAR to PLAY AGAIN"
         if self.player.current_score > int(self.high_score):
             self.high_score = self.player.current_score
+            self.high_score_file[1] = str(self.player.current_score)
             self.high_score_file[1] = str(self.player.current_score) +'\n'
             plik = open("high_score.txt",'w')
             for element in self.high_score_file:
@@ -504,6 +508,7 @@ class Game:
             plik.close()
         self.draw_text('YOUR CURRENT SCORE: {}'.format(self.player.current_score),
                        self.screen, [WIDTH//2 , 250], 48,(153, 255, 102), 'arial',centered=True)
+        self.draw_text('YOUR HIGH SCORE: {}'.format(self.high_score[:-1]), self.screen, [WIDTH//2, 400],48,(255, 191, 0), 'arial',centered=True)
         self.draw_text('YOUR HIGH SCORE: {}'.format(int(self.high_score)), self.screen, [WIDTH//2, 400],48,(255, 191, 0), 'arial',centered=True)
 
         self.draw_text("GAME OVER", self.screen, [WIDTH//2, 100], 52,
@@ -564,6 +569,9 @@ class Game:
             self.button_set_level_0.listen(event)
 
     def config_draw(self):
+        """
+        Creat windown "Config"
+        """
         self.screen.fill((0, 102, 102))
         self.draw_text("Setting Volume", self.screen, [WIDTH // 2, 30], 36, (190, 190, 190), "arial", centered=True)
         self.draw_text("Level Game", self.screen, [WIDTH // 2, HEIGHT//2-50], 36, (190, 190, 190), "arial", centered=True)
@@ -592,9 +600,13 @@ class Game:
             self.button_exit.listen(event)
 
     def finish_draw(self):
+        """
+        Creat windown "Finish"
+        """
         self.screen.fill(BLACK)
         if self.player.current_score > int(self.high_score):
             self.high_score = self.player.current_score
+            self.high_score_file[1] = str(self.player.current_score)
             self.high_score_file[1] = str(self.player.current_score) +'\n'
             plik = open("high_score.txt",'w')
             for element in self.high_score_file:
@@ -603,6 +615,7 @@ class Game:
         self.draw_text('YOU LIVE YET', self.screen, [WIDTH//2 , 150], 65, (255, 204, 0), START_FONT,centered=True)
         self.draw_text('CURRENT SCORE: {}'.format(self.player.current_score),
                        self.screen, [WIDTH//2, 300], 42, (153, 255, 102), 'arial',centered=True)
+        self.draw_text('HIGH SCORE: {}'.format(self.high_score[:-1]), self.screen, [WIDTH // 2, 450], 42, (255, 204, 0), 'arial',centered=True)
         self.draw_text('HIGH SCORE: {}'.format(int(self.high_score)), self.screen, [WIDTH // 2, 450], 42, (255, 204, 0), 'arial',centered=True)
         self.button_return.draw()
         self.button_exit.draw()
@@ -620,6 +633,9 @@ class Game:
             self.button_exit.listen(event)
 
     def catch_draw(self):
+        """
+        Creat windown "CATCH"
+        """
         self.screen.fill(BLACK)
         if self.current_time > float(self.high_time):
             self.high_score = self.player.current_score
@@ -646,7 +662,6 @@ class Enemy:
         self.pix_pos = self.get_pix_pos()
         self.radius = int(self.game.cell_width//2.3)
         self.number = number
-        self.colour = self.set_colour()
         self.direction = vec(0, 0)
         self.personality = self.set_personality()
         self.target = None
@@ -676,9 +691,9 @@ class Enemy:
             if self.time_to_move():
                 self.move()
         # Setting grid position in reference to pix position
-        self.grid_pos[0] = (self.pix_pos[0]-TOP_BOTTOM_BUFFER +
+        self.grid_pos[0] = (self.pix_pos[0]-TOP_BOTTOM +
                             self.game.cell_width//2)//self.game.cell_width+1
-        self.grid_pos[1] = (self.pix_pos[1]-TOP_BOTTOM_BUFFER +
+        self.grid_pos[1] = (self.pix_pos[1]-TOP_BOTTOM +
                             self.game.cell_height//2)//self.game.cell_height+1
 
     def draw(self):
@@ -726,10 +741,10 @@ class Enemy:
         """
         Chech ghost colidate with wall.
         """
-        if int(self.pix_pos.x+TOP_BOTTOM_BUFFER//2) % self.game.cell_width == 0:
+        if int(self.pix_pos.x+TOP_BOTTOM//2) % self.game.cell_width == 0:
             if self.direction == vec(1, 0) or self.direction == vec(-1, 0) or self.direction == vec(0, 0):
                 return True
-        if int(self.pix_pos.y+TOP_BOTTOM_BUFFER//2) % self.game.cell_height == 0:
+        if int(self.pix_pos.y+TOP_BOTTOM//2) % self.game.cell_height == 0:
             if self.direction == vec(0, 1) or self.direction == vec(0, -1) or self.direction == vec(0, 0):
                 return True
         return False
@@ -764,11 +779,11 @@ class Enemy:
         :param target: player position or shelter position
         :return: move
         """
-        path = self.BFS([int(self.grid_pos.x), int(self.grid_pos.y)],
+        path = self.find_path([int(self.grid_pos.x), int(self.grid_pos.y)],
                         [int(target[0]), int(target[1])])
         return path[1]
 
-    def BFS(self, start, target):
+    def find_path(self, start, target):
         """
         Base function to find path
         :param start: position ghost
@@ -855,19 +870,9 @@ class Enemy:
         Function calculate the postion with grid_pos to the pixel position.
         :return pixel vector
         """
-        return vec((self.grid_pos.x*self.game.cell_width)+TOP_BOTTOM_BUFFER//2+self.game.cell_width//2,
-                   (self.grid_pos.y*self.game.cell_height)+TOP_BOTTOM_BUFFER//2 +
+        return vec((self.grid_pos.x*self.game.cell_width)+TOP_BOTTOM//2+self.game.cell_width//2,
+                   (self.grid_pos.y*self.game.cell_height)+TOP_BOTTOM//2 +
                    self.game.cell_height//2)
-
-    def set_colour(self):
-        if self.number == 0:
-            return (43, 78, 203)
-        if self.number == 1:
-            return (197, 200, 27)
-        if self.number == 2:
-            return (189, 29, 29)
-        if self.number == 3:
-            return (215, 159, 33)
 
     def set_personality(self):
         """
@@ -947,9 +952,9 @@ class Player:
                 self.direction = self.stored_direction
             self.able_to_move = self.can_move()
 
-        self.grid_pos[0] = (self.pix_pos[0]-TOP_BOTTOM_BUFFER +
+        self.grid_pos[0] = (self.pix_pos[0]-TOP_BOTTOM +
                             self.game.cell_width//2)//self.game.cell_width+1
-        self.grid_pos[1] = (self.pix_pos[1]-TOP_BOTTOM_BUFFER +
+        self.grid_pos[1] = (self.pix_pos[1]-TOP_BOTTOM +
                             self.game.cell_height//2)//self.game.cell_height+1
         self.draw()
         if self.on_coin():
@@ -992,10 +997,10 @@ class Player:
         Check colidate coin with pacman.
         """
         if self.grid_pos in self.game.coins:
-            if int(self.pix_pos.x+TOP_BOTTOM_BUFFER//2) % self.game.cell_width == 0:
+            if int(self.pix_pos.x+TOP_BOTTOM//2) % self.game.cell_width == 0:
                 if self.direction == vec(1, 0) or self.direction == vec(-1, 0):
                     return True
-            if int(self.pix_pos.y+TOP_BOTTOM_BUFFER//2) % self.game.cell_height == 0:
+            if int(self.pix_pos.y+TOP_BOTTOM//2) % self.game.cell_height == 0:
                 if self.direction == vec(0, 1) or self.direction == vec(0, -1):
                     return True
         return False
@@ -1005,10 +1010,10 @@ class Player:
         Check colidate coin with pacman.
         """
         if self.grid_pos in self.game.kill_ghost:
-            if int(self.pix_pos.x+TOP_BOTTOM_BUFFER//2) % self.game.cell_width == 0:
+            if int(self.pix_pos.x+TOP_BOTTOM//2) % self.game.cell_width == 0:
                 if self.direction == vec(1, 0) or self.direction == vec(-1, 0):
                     return True
-            if int(self.pix_pos.y+TOP_BOTTOM_BUFFER//2) % self.game.cell_height == 0:
+            if int(self.pix_pos.y+TOP_BOTTOM//2) % self.game.cell_height == 0:
                 if self.direction == vec(0, 1) or self.direction == vec(0, -1):
                     return True
         return False
@@ -1039,18 +1044,18 @@ class Player:
         Function calculate the postion with grid_pos to the pixel position.
         :return pixel vector
         """
-        return vec((self.grid_pos[0]*self.game.cell_width)+TOP_BOTTOM_BUFFER//2+self.game.cell_width//2,
+        return vec((self.grid_pos[0]*self.game.cell_width)+TOP_BOTTOM//2+self.game.cell_width//2,
                    (self.grid_pos[1]*self.game.cell_height) +
-                   TOP_BOTTOM_BUFFER//2+self.game.cell_height//2)
+                   TOP_BOTTOM//2+self.game.cell_height//2)
 
     def time_to_move(self):
         """
         Chech correctness movement.
         """
-        if int(self.pix_pos.x+TOP_BOTTOM_BUFFER//2) % self.game.cell_width == 0:
+        if int(self.pix_pos.x+TOP_BOTTOM//2) % self.game.cell_width == 0:
             if self.direction == vec(1, 0) or self.direction == vec(-1, 0) or self.direction == vec(0, 0):
                 return True
-        if int(self.pix_pos.y+TOP_BOTTOM_BUFFER//2) % self.game.cell_height == 0:
+        if int(self.pix_pos.y+TOP_BOTTOM//2) % self.game.cell_height == 0:
             if self.direction == vec(0, 1) or self.direction == vec(0, -1) or self.direction == vec(0, 0):
                 return True
 
